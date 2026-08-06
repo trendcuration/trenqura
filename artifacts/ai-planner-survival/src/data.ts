@@ -6,7 +6,7 @@ export type Category = {
 };
 export type Post = {
   id: string; slug: string; title: string; excerpt: string; category: string; kind: ContentKind;
-  status: Status; publishedAt: string; revisedAt?: string; readingTime: string; tags: string[];
+  status: Status; publishedAt: string; publishedAtIso?: string; revisedAt?: string; readingTime: string; tags: string[];
   summary: string[]; toc: string[]; body: { heading: string; paragraphs: string[] }[];
   mistakes: string[]; checklist: string[]; related: string[]; featured?: boolean;
 };
@@ -16,7 +16,7 @@ export const siteConfig = {
   name: 'AI기획자로 살아남기',
   shortName: 'AI기획자',
   description: 'AI로 작은 앱과 콘텐츠를 만드는 직장인, 초기 1인 운영자를 위한 정직한 현장 기록.',
-  email: 'hello@trenqura.example',
+  email: 'trend_curation@naver.com',
   operator: 'Trenqura',
 };
 
