@@ -118,7 +118,7 @@
 }
 
 @layer utilities {
-  .font-display { font-family: var(--app-font-serif); }
+  .font-display { font-family: var(--app-font-serif); word-break: keep-all; overflow-wrap: break-word; }
   .font-mono { font-family: var(--app-font-mono); }
   .container-editorial { width: min(100% - 2rem, 1180px); margin-inline: auto; }
   .reading-width { width: min(100%, 760px); }

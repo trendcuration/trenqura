@@ -7,8 +7,28 @@ const STORAGE_KEY = 'ai-planner-survival-cms';
 type Store = { posts: Post[]; columns: Column[]; categories: Category[]; settings: { tagline: string; contact: string } };
 const defaultStore: Store = { posts: initialPosts, columns, categories, settings: { tagline: siteConfig.description, contact: siteConfig.email } };
 
+function normalizeStoredDates(posts: Post[]) {
+  return posts.map((post) => ({
+    ...post,
+    publishedAt: post.publishedAt.replace(/^2025\./, '2026.'),
+    revisedAt: post.revisedAt?.replace(/^2025\./, '2026.'),
+  }));
+}
+
 function loadStore(): Store {
-  try { const value = localStorage.getItem(STORAGE_KEY); return value ? { ...defaultStore, ...JSON.parse(value) } : defaultStore; } catch { return defaultStore; }
+  try {
+    const value = localStorage.getItem(STORAGE_KEY);
+    if (!value) return defaultStore;
+    const parsed = JSON.parse(value) as Partial<Store>;
+    return {
+      ...defaultStore,
+      ...parsed,
+      posts: normalizeStoredDates(Array.isArray(parsed.posts) ? parsed.posts : defaultStore.posts),
+      settings: { ...defaultStore.settings, ...parsed.settings },
+    };
+  } catch {
+    return defaultStore;
+  }
 }
 function useStore() {
   const [store, setStore] = useState<Store>(loadStore);
@@ -68,7 +88,7 @@ function Footer() {
       <div><p className="font-mono text-[10px] tracking-[.15em] text-[hsl(var(--accent))]">READ</p><div className="mt-3 flex flex-col gap-2 text-sm"><Link href="/categories" className="nav-link" data-testid="link-footer-categories">카테고리</Link><Link href="/columns" className="nav-link" data-testid="link-footer-columns">칼럼</Link><Link href="/sitemap" className="nav-link" data-testid="link-footer-sitemap">사이트맵</Link></div></div>
       <div><p className="font-mono text-[10px] tracking-[.15em] text-[hsl(var(--accent))]">TRUST</p><div className="mt-3 flex flex-col gap-2 text-sm"><Link href="/about" className="nav-link" data-testid="link-footer-about">사이트 소개</Link><Link href="/privacy" className="nav-link" data-testid="link-footer-privacy">개인정보처리방침</Link><Link href="/disclaimer" className="nav-link" data-testid="link-footer-disclaimer">면책 안내</Link></div></div>
     </div>
-    <div className="container-editorial flex flex-col justify-between gap-2 border-t border-[hsl(var(--border))] py-5 text-xs text-[hsl(var(--muted-foreground))] sm:flex-row"><span>© 2025 Trenqura. 개인적인 편집 기록입니다.</span><span>읽고, 확인하고, 다시 고칩니다.</span></div>
+    <div className="container-editorial flex flex-col justify-between gap-2 border-t border-[hsl(var(--border))] py-5 text-xs text-[hsl(var(--muted-foreground))] sm:flex-row"><span>© 2026 Trenqura. 개인적인 편집 기록입니다.</span><span>읽고, 확인하고, 다시 고칩니다.</span></div>
   </footer>;
 }
 
@@ -92,8 +112,8 @@ function Home({ store }: { store: Store }) {
   const livePosts = store.posts.filter((post) => post.status === 'published');
   return <Shell><Meta title="작은 실험을 위한 AI 기획 기록" /><main>
     <section className="paper-grid border-b border-[hsl(var(--border))]"><div className="container-editorial grid min-h-[520px] items-center gap-12 py-20 md:grid-cols-[1.15fr_.85fr] md:py-28">
-      <div className="reveal-up"><p className="rule-label">FIELD NOTE / 2025</p><h1 className="font-display mt-7 max-w-3xl text-5xl font-bold leading-[1.18] tracking-[-.06em] text-[hsl(var(--primary))] md:text-7xl">AI를 쓰는 사람의<br /><span className="text-[hsl(var(--accent))]">판단을 기록합니다.</span></h1><p className="mt-7 max-w-xl text-base leading-8 text-[hsl(var(--muted-foreground))] md:text-lg">{siteConfig.description} 성공담보다, 결정이 바뀐 순간과 다시 확인한 방법을 남깁니다.</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/posts/ai-기획은-프롬프트보다-문제-정의에서-시작한다" className="button-primary focus-ring inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold" data-testid="link-home-featured">첫 기록부터 읽기 <ArrowRight size={16} /></Link><Link href="/about" className="button-outline focus-ring inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold" data-testid="link-home-about">운영 목적 <ChevronRight size={16} /></Link></div></div>
-      <div className="reveal-up reveal-delay-2 relative border-l border-[hsl(var(--accent)/.5)] pl-7 md:pl-10"><div className="font-mono text-xs leading-7 text-[hsl(var(--muted-foreground))]">NOTE 000 / 시작하며</div><p className="font-display mt-5 text-2xl font-semibold leading-[1.55] text-[hsl(var(--primary))]">“AI가 해준 일”보다<br />“왜 그렇게 하기로 했는지”가<br />다음 사람에게 오래 남습니다.</p><div className="mt-8 h-px w-14 bg-[hsl(var(--accent))]" /><p className="mt-5 text-sm leading-7 text-[hsl(var(--muted-foreground))]">이곳은 AI 도구를 줄 세우는 곳이 아닙니다. 작은 결과물을 만드는 과정에서 생긴 질문과 확인의 순서를 펼쳐놓는 책상에 가깝습니다.</p></div>
+      <div className="reveal-up"><p className="rule-label">FIELD NOTE / 2026</p><h1 className="font-display mt-7 max-w-3xl text-5xl font-bold leading-[1.18] tracking-[-.06em] text-[hsl(var(--primary))] md:text-7xl">AI를 쓰는 사람의 <span className="text-[hsl(var(--accent))]">판단을 기록합니다.</span></h1><p className="mt-7 max-w-xl text-base leading-8 text-[hsl(var(--muted-foreground))] md:text-lg">{siteConfig.description} 성공담보다, 결정이 바뀐 순간과 다시 확인한 방법을 남깁니다.</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/posts/ai-기획은-프롬프트보다-문제-정의에서-시작한다" className="button-primary focus-ring inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold" data-testid="link-home-featured">첫 기록부터 읽기 <ArrowRight size={16} /></Link><Link href="/about" className="button-outline focus-ring inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold" data-testid="link-home-about">운영 목적 <ChevronRight size={16} /></Link></div></div>
+      <div className="reveal-up reveal-delay-2 relative border-l border-[hsl(var(--accent)/.5)] pl-7 md:pl-10"><div className="font-mono text-xs leading-7 text-[hsl(var(--muted-foreground))]">NOTE 000 / 시작하며</div><p className="font-display mt-5 max-w-sm text-2xl font-semibold leading-[1.55] text-[hsl(var(--primary))]">“AI가 해준 일”보다 “왜 그렇게 하기로 했는지”가 다음 사람에게 오래 남습니다.</p><div className="mt-8 h-px w-14 bg-[hsl(var(--accent))]" /><p className="mt-5 text-sm leading-7 text-[hsl(var(--muted-foreground))]">이곳은 AI 도구를 줄 세우는 곳이 아닙니다. 작은 결과물을 만드는 과정에서 생긴 질문과 확인의 순서를 펼쳐놓는 책상에 가깝습니다.</p></div>
     </div></section>
     <section className="container-editorial py-20"><SectionTitle eyebrow="LATEST / PUBLISHED" title="최근 공개한 기록" href="/categories" linkLabel="전체 기록" /><div className="grid gap-5 md:grid-cols-[1.18fr_.82fr]"><PostCard post={livePosts[0]} featured /><div className="grid gap-5">{livePosts.slice(1, 3).map((post) => <PostCard key={post.id} post={post} />)}</div></div></section>
     <section className="bg-[hsl(var(--primary))] py-20 text-[hsl(var(--primary-foreground))]"><div className="container-editorial"><SectionTitle eyebrow="FIVE QUESTIONS" title="다섯 개의 경로" href="/categories" /><div className="grid border-t border-[hsl(var(--primary-foreground)/.2)] md:grid-cols-5">{categories.map((category, index) => <Link key={category.slug} href={`/categories/${category.slug}`} className="group border-b border-[hsl(var(--primary-foreground)/.2)] py-6 md:border-b-0 md:border-r md:px-5 md:first:pl-0 md:last:border-r-0" data-testid={`link-home-category-${category.slug}`}><span className="font-mono text-xs text-[hsl(var(--accent))]">0{index + 1}</span><h3 className="font-display mt-8 text-xl font-bold">{category.name}</h3><p className="mt-3 text-sm leading-6 text-[hsl(var(--primary-foreground)/.68)]">{category.description}</p><ArrowRight className="mt-6 text-[hsl(var(--accent))] transition-transform group-hover:translate-x-1" size={18} /></Link>)}</div></div></section>
