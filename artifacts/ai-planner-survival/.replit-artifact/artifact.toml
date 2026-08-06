@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AI기획자로 살아남기"
+description = "AI 에이전트 운영, 앱 개발, 콘텐츠와 수익화 실험의 판단과 실패를 기록하는 한국어 정보 사이트와 정적 CMS-lite 관리자 화면"
+version = "1.0.0"
+id = "artifacts/ai-planner-survival"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26142
+
+[services.development]
+run = "pnpm --filter @workspace/ai-planner-survival run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ai-planner-survival", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/ai-planner-survival/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26142"
+BASE_PATH = "/"
