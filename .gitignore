@@ -47,3 +47,9 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Vercel and environment files
+.env
+.env.*
+!.env.example
+.vercel
