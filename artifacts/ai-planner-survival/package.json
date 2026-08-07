@@ -76,6 +76,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.1",
+    "@vercel/analytics": "^2.0.1",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1"
   }
