@@ -121,7 +121,8 @@
   .font-display { font-family: var(--app-font-serif); word-break: keep-all; overflow-wrap: break-word; }
   .font-mono { font-family: var(--app-font-mono); }
   .container-editorial { width: min(100% - 2rem, 1180px); margin-inline: auto; }
-  .reading-width { width: min(100%, 760px); }
+  /* Keep article copy comfortably inset even when combined with container-editorial. */
+  .reading-width { width: min(calc(100% - 2.5rem), 760px); }
   .rule-label { display: flex; align-items: center; gap: .75rem; color: hsl(var(--accent)); font-family: var(--app-font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
   .rule-label::after { content: ''; height: 1px; width: 3rem; background: hsl(var(--accent) / .55); }
   .focus-ring:focus-visible { outline: 2px solid hsl(var(--accent)); outline-offset: 3px; }
@@ -158,4 +159,11 @@
 .reveal-delay-1 { animation-delay: .08s; }
 .reveal-delay-2 { animation-delay: .16s; }
 .reveal-delay-3 { animation-delay: .24s; }
+@media (max-width: 640px) {
+  /* Article pages need stronger side breathing room than navigation pages. */
+  .reading-width { width: calc(100% - 2.5rem); }
+  .article-title { font-size: 2rem; line-height: 1.38; letter-spacing: -.04em; }
+  .prose-editorial { font-size: 1rem; line-height: 1.95; }
+  .prose-editorial h2 { font-size: 1.5rem; line-height: 1.42; margin: 2.6rem 0 1rem; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
