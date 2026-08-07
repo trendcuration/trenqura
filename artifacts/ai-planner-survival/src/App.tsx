@@ -24,6 +24,13 @@ function Meta({ title, description = siteConfig.description }: { title: string; 
     let tag = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     if (!tag) { tag = document.createElement('meta'); tag.name = 'description'; document.head.appendChild(tag); }
     tag.content = description;
+    const canonicalUrl = `https://www.trencub.com${window.location.pathname}`;
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = canonicalUrl;
+    let ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement | null;
+    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
+    ogUrl.content = canonicalUrl;
   }, [title, description]);
   return null;
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>AI 기획자로 살아남기</title>
+    <link>https://www.trencub.com</link>
+    <description>AI로 작은 앱과 콘텐츠를 만드는 과정에서, 도구보다 판단의 흔적을 남깁니다.</description>
+    <language>ko</language>
+    <lastBuildDate>Fri, 07 Aug 2026 00:31:56 GMT</lastBuildDate>
+    <item>
+      <title><![CDATA[Replit으로 시작한 블로그를 Vercel로 옮기고, 글쓰기부터 다시 설계한 이유]]></title>
+      <link>https://www.trencub.com/posts/replit-to-vercel-cms-decision</link>
+      <guid isPermaLink="true">https://www.trencub.com/posts/replit-to-vercel-cms-decision</guid>
+      <description><![CDATA[홈페이지 디자인을 빠르게 만드는 일과 꾸준히 글을 쓰는 일은 다른 문제였다.
+정적 사이트의 장점은 유지하되, 글 발행은 관리자 화면에서 끝나도록 다시 설계했다.
+이번 선택은 완성된 해법이 아니라, 운영 부담을 줄이기 위한 첫 번째 구조다.]]></description>
+      <pubDate>Thu, 06 Aug 2026 23:55:23 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
