@@ -6,7 +6,7 @@ export type Category = {
 };
 export type Post = {
   id: string; slug: string; title: string; excerpt: string; category: string; kind: ContentKind;
-  status: Status; publishedAt: string; publishedAtIso?: string; revisedAt?: string; readingTime: string; tags: string[];
+  status: Status; publishedAt: string; publishedAtIso?: string; revisedAt?: string; coverImageUrl?: string; readingTime: string; tags: string[];
   summary: string[]; toc: string[]; body: { heading: string; paragraphs: string[] }[];
   mistakes: string[]; checklist: string[]; related: string[]; featured?: boolean;
 };

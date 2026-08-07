@@ -6,7 +6,7 @@ type JsonRecord = Record<string, unknown>;
 type PostRow = {
   id: string; slug: string; title: string; excerpt: string; category: string; kind: string; status: Status;
   published_at: string | null; reading_time: string; tags: string[] | null; summary: unknown; toc: unknown;
-  body: unknown; mistakes: unknown; checklist: unknown; related_slugs: string[] | null; featured: boolean | null;
+  body: unknown; mistakes: unknown; checklist: unknown; related_slugs: string[] | null; featured: boolean | null; cover_image_url: string | null;
   created_at: string; updated_at: string;
 };
 type ColumnRow = { id: string; slug: string; title: string; description: string; status: Status; issue: string; body: unknown };
@@ -24,7 +24,7 @@ const formatDate = (value: string | null) => value ? new Intl.DateTimeFormat('ko
 export const toPost = (row: PostRow): Post => ({
   id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, category: row.category,
   kind: (row.kind || '현장 기록') as ContentKind, status: row.status, publishedAt: formatDate(row.published_at), publishedAtIso: row.published_at ?? undefined,
-  revisedAt: formatDate(row.updated_at), readingTime: row.reading_time || '5분', tags: row.tags ?? [],
+  revisedAt: formatDate(row.updated_at), coverImageUrl: row.cover_image_url ?? undefined, readingTime: row.reading_time || '5분', tags: row.tags ?? [],
   summary: strings(row.summary), toc: strings(row.toc), body: sections(row.body), mistakes: strings(row.mistakes),
   checklist: strings(row.checklist), related: row.related_slugs ?? [], featured: Boolean(row.featured),
 });
@@ -40,7 +40,7 @@ export const toPostRow = (post: PostInput, status: Status, publishedAt: string |
   kind: post.kind, status, published_at: publishedAt, reading_time: post.readingTime.trim() || '5분',
   tags: post.tags.filter(Boolean), summary: post.summary.filter(Boolean), toc: post.toc.filter(Boolean),
   body: post.body.filter((section) => section.heading.trim()), mistakes: post.mistakes.filter(Boolean),
-  checklist: post.checklist.filter(Boolean), related_slugs: post.related.filter(Boolean), featured: Boolean(post.featured),
+  checklist: post.checklist.filter(Boolean), related_slugs: post.related.filter(Boolean), featured: Boolean(post.featured), cover_image_url: post.coverImageUrl?.trim() || null,
 });
 
 async function requireClient() {
@@ -82,6 +82,20 @@ export async function savePost(id: string, post: PostInput, status: Status, publ
   const result = await client.from('posts').update(toPostRow(post, status, publishedAt)).eq('id', id).select().single();
   if (result.error) throw result.error;
   return toPost(result.data as PostRow);
+}
+
+export async function uploadCoverImage(file: File) {
+  const allowed = new Set(['image/jpeg', 'image/png', 'image/webp']);
+  if (!allowed.has(file.type)) throw new Error('JPG, PNG, WebP 파일만 업로드할 수 있습니다.');
+  if (file.size > 5 * 1024 * 1024) throw new Error('이미지는 5MB 이하여야 합니다.');
+  const client = await requireClient();
+  const { data: { user } } = await client.auth.getUser();
+  if (!user) throw new Error('이미지 업로드를 위해 다시 로그인해 주세요.');
+  const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+  const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
+  const upload = await client.storage.from('post-images').upload(path, file, { cacheControl: '31536000', contentType: file.type, upsert: false });
+  if (upload.error) throw upload.error;
+  return client.storage.from('post-images').getPublicUrl(upload.data.path).data.publicUrl;
 }
 
 export async function removePost(id: string) {
