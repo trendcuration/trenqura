@@ -19,13 +19,14 @@ const sections = (value: unknown): Post['body'] => Array.isArray(value)
       return typeof record.heading === 'string' ? [{ heading: record.heading, paragraphs: strings(record.paragraphs) }] : [];
     })
   : [];
+const markdown = (value: unknown) => value && typeof value === 'object' && !Array.isArray(value) && typeof (value as { markdown?: unknown }).markdown === 'string' ? (value as { markdown: string }).markdown : undefined;
 const formatDate = (value: string | null) => value ? new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value)).replace(/ /g, '').replace(/\.$/, '') : '';
 
 export const toPost = (row: PostRow): Post => ({
   id: row.id, slug: row.slug, title: row.title, excerpt: row.excerpt, category: row.category,
   kind: (row.kind || '현장 기록') as ContentKind, status: row.status, publishedAt: formatDate(row.published_at), publishedAtIso: row.published_at ?? undefined,
   revisedAt: formatDate(row.updated_at), coverImageUrl: row.cover_image_url ?? undefined, readingTime: row.reading_time || '5분', tags: row.tags ?? [],
-  summary: strings(row.summary), toc: strings(row.toc), body: sections(row.body), mistakes: strings(row.mistakes),
+  summary: strings(row.summary), toc: strings(row.toc), body: sections(row.body), bodyMarkdown: markdown(row.body), mistakes: strings(row.mistakes),
   checklist: strings(row.checklist), related: row.related_slugs ?? [], featured: Boolean(row.featured),
 });
 
@@ -39,7 +40,7 @@ export const toPostRow = (post: PostInput, status: Status, publishedAt: string |
   slug: post.slug.trim(), title: post.title.trim(), excerpt: post.excerpt.trim(), category: post.category,
   kind: post.kind, status, published_at: publishedAt, reading_time: post.readingTime.trim() || '5분',
   tags: post.tags.filter(Boolean), summary: post.summary.filter(Boolean), toc: post.toc.filter(Boolean),
-  body: post.body.filter((section) => section.heading.trim()), mistakes: post.mistakes.filter(Boolean),
+  body: post.bodyMarkdown?.trim() ? { markdown: post.bodyMarkdown } : post.body.filter((section) => section.heading.trim()), mistakes: post.mistakes.filter(Boolean),
   checklist: post.checklist.filter(Boolean), related_slugs: post.related.filter(Boolean), featured: Boolean(post.featured), cover_image_url: post.coverImageUrl?.trim() || null,
 });
 
