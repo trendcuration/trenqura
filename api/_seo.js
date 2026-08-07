@@ -19,7 +19,7 @@ async function getPublishedPosts() {
 
 async function sendSitemap(res) {
   const posts = await getPublishedPosts();
-  const staticPages = ['', '/categories', '/columns', '/about', '/contact', '/privacy'];
+  const staticPages = ['', '/categories', '/about', '/contact', '/privacy', '/disclaimer'];
   const urls = [
     ...staticPages.map((page) => ({ loc: `${SITE_URL}${page || '/'}`, lastmod: null })),
     ...posts.map((post) => ({ loc: `${SITE_URL}/posts/${encodeURIComponent(post.slug)}`, lastmod: post.updated_at || post.published_at })),

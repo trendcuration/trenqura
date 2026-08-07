@@ -71,7 +71,7 @@ export async function createDraft(title: string) {
   const client = await requireClient();
   const stamp = Date.now();
   const result = await client.from('posts').insert(toPostRow({
-    slug: `draft-${stamp}`, title: title.trim() || '제목 없는 초안', excerpt: '', category: 'problem', kind: '현장 기록',
+    slug: `draft-${stamp}`, title: title.trim() || '제목 없는 초안', excerpt: '', category: 'planning-note', kind: '현장 기록',
     status: 'draft', readingTime: '5분', tags: [], summary: [], toc: [], body: [], mistakes: [], checklist: [], related: [], featured: false,
   }, 'draft', null)).select().single();
   if (result.error) throw result.error;

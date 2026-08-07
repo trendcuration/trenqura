@@ -38,7 +38,7 @@ const response = await fetch(`${url}/rest/v1/posts?select=slug,title,excerpt,pub
 });
 if (!response.ok) throw new Error(`Could not load published posts for SEO files: ${response.status}`);
 const posts = await response.json();
-const staticPages = ['', '/categories', '/columns', '/about', '/contact', '/privacy'];
+const staticPages = ['', '/categories', '/about', '/contact', '/privacy', '/disclaimer'];
 const urls = [
   ...staticPages.map((page) => ({ loc: `${siteUrl}${page || '/'}`, lastmod: null })),
   ...posts.map((post) => ({ loc: `${siteUrl}/posts/${encodeURIComponent(post.slug)}`, lastmod: post.updated_at || post.published_at })),
