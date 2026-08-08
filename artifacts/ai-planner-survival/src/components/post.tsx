@@ -7,8 +7,10 @@ import { getCategory, type Post } from "../data";
 import { Tag } from "./layout";
 
 export function PostMeta({ post }: { post: Post }) {
+  const category = getCategory(post.category);
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[hsl(var(--muted-foreground))]">
+      {category && <Tag>{category.name}</Tag>}
       <Tag>{post.kind}</Tag>
       {post.publishedAt && <span>{post.publishedAt}</span>}
       <span>읽는 데 {post.readingTime}</span>
@@ -48,8 +50,7 @@ export function PostCard({
         <p className="mt-3 text-sm leading-7 text-[hsl(var(--muted-foreground))]">
           {post.excerpt}
         </p>
-        <div className="mt-5 flex items-center justify-between text-xs">
-          <span>{getCategory(post.category)?.name}</span>
+        <div className="mt-5 flex items-center justify-end text-xs">
           <ChevronRight className="text-[hsl(var(--accent))]" size={17} />
         </div>
       </div>
