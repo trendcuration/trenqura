@@ -18,19 +18,30 @@ const textToBody = (text: string): Post['body'] => text.split(/\n\s*---\s*\n/).f
 });
 const todayIso = () => new Date().toISOString();
 
+function setMetaByName(name: string, content: string) {
+  let tag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+  if (!tag) { tag = document.createElement('meta'); tag.name = name; document.head.appendChild(tag); }
+  tag.content = content;
+}
+function setMetaByProperty(property: string, content: string) {
+  let tag = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+  if (!tag) { tag = document.createElement('meta'); tag.setAttribute('property', property); document.head.appendChild(tag); }
+  tag.content = content;
+}
 function Meta({ title, description = siteConfig.description }: { title: string; description?: string }) {
   useEffect(() => {
-    document.title = `${title} | ${siteConfig.name}`;
-    let tag = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (!tag) { tag = document.createElement('meta'); tag.name = 'description'; document.head.appendChild(tag); }
-    tag.content = description;
+    const fullTitle = `${title} | ${siteConfig.name}`;
+    document.title = fullTitle;
     const canonicalUrl = `https://www.trencub.com${window.location.pathname}`;
+    setMetaByName('description', description);
+    setMetaByProperty('og:title', fullTitle);
+    setMetaByProperty('og:description', description);
+    setMetaByProperty('og:url', canonicalUrl);
+    setMetaByName('twitter:title', fullTitle);
+    setMetaByName('twitter:description', description);
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
     canonical.href = canonicalUrl;
-    let ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement | null;
-    if (!ogUrl) { ogUrl = document.createElement('meta'); ogUrl.setAttribute('property', 'og:url'); document.head.appendChild(ogUrl); }
-    ogUrl.content = canonicalUrl;
   }, [title, description]);
   return null;
 }
