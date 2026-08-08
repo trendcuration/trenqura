@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { next } from "@vercel/edge";
 
 // Search engines, social-preview unfurlers, and AI answer engines that fetch
