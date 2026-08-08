@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   icons: { icon: "/favicon.svg" },
   alternates: { types: { "application/rss+xml": "/rss.xml" } },
+  verification: { google: "gdw8EYciIb9gWvNIljjlRZ_8TF8_GefDgauY26KLDM0" },
   openGraph: {
     type: "website",
     url: "/",
