@@ -142,7 +142,25 @@ function PostEditor({
   const [draft, setDraft] = useState(post);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  useEffect(() => setDraft(post), [post]);
+  const [tagsText, setTagsText] = useState(post.tags.join(", "));
+  const [relatedText, setRelatedText] = useState(post.related.join(", "));
+  useEffect(() => {
+    setDraft(post);
+    setTagsText(post.tags.join(", "));
+    setRelatedText(post.related.join(", "));
+  }, [post]);
+  const listField =
+    (setText: (value: string) => void, key: "tags" | "related") =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setText(event.target.value);
+      setDraft((current) => ({
+        ...current,
+        [key]: event.target.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+      }));
+    };
   const field =
     <K extends keyof Post>(key: K) =>
     (
@@ -298,16 +316,8 @@ function PostEditor({
             (쉼표로 구분)
           </span>
           <input
-            value={draft.tags.join(", ")}
-            onChange={(e) =>
-              setDraft((current) => ({
-                ...current,
-                tags: e.target.value
-                  .split(",")
-                  .map((tag) => tag.trim())
-                  .filter(Boolean),
-              }))
-            }
+            value={tagsText}
+            onChange={listField(setTagsText, "tags")}
             className="mt-2 w-full border p-3 font-normal"
           />
         </label>
@@ -443,16 +453,8 @@ function PostEditor({
             (쉼표로 구분)
           </span>
           <input
-            value={draft.related.join(", ")}
-            onChange={(e) =>
-              setDraft((current) => ({
-                ...current,
-                related: e.target.value
-                  .split(",")
-                  .map((value) => value.trim())
-                  .filter(Boolean),
-              }))
-            }
+            value={relatedText}
+            onChange={listField(setRelatedText, "related")}
             className="mt-2 w-full border p-3 font-normal"
           />
         </label>
