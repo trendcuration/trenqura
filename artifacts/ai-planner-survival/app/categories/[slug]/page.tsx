@@ -42,10 +42,7 @@ export default async function CategoryDetailPage({
   const category = getCategory(slug);
   if (!category) notFound();
 
-  const { posts } = await fetchPublishedContentCached().catch(() => ({
-    posts: [],
-    columns: [],
-  }));
+  const { posts } = await fetchPublishedContentCached().catch(() => ({ posts: [] }));
   const list = posts.filter((post) => post.category === slug);
 
   return (

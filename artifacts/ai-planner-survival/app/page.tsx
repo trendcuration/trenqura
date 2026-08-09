@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { siteConfig } from "../src/data";
-import { Notice, Shell, Tag } from "../src/components/layout";
+import { Notice, Shell } from "../src/components/layout";
 import { PostCard } from "../src/components/post";
 import { fetchPublishedContentCached } from "../src/lib/cms";
 
@@ -13,7 +13,6 @@ async function getContent() {
   } catch {
     return {
       posts: [],
-      columns: [],
       error: "공개 콘텐츠를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     };
   }
@@ -22,7 +21,7 @@ async function getContent() {
 export const revalidate = 300;
 
 export default async function HomePage() {
-  const { posts, columns, error } = await getContent();
+  const { posts, error } = await getContent();
   const featured = posts.find((post) => post.featured) ?? posts[0];
 
   return (
@@ -98,33 +97,6 @@ export default async function HomePage() {
             </div>
           )}
         </section>
-        {columns.length > 0 && (
-          <section className="border-t border-[hsl(var(--border))] py-20">
-            <div className="container-editorial">
-              <p className="rule-label">COLUMNS</p>
-              <h2 className="font-display mt-3 text-3xl font-bold text-[hsl(var(--primary))]">
-                연재 중인 생각
-              </h2>
-              <div className="mt-7 grid gap-5 md:grid-cols-3">
-                {columns.map((column) => (
-                  <Link
-                    key={column.id}
-                    href={`/columns/${column.slug}`}
-                    className="editorial-card p-6"
-                  >
-                    <Tag>{column.issue}</Tag>
-                    <h3 className="font-display mt-6 text-xl font-bold text-[hsl(var(--primary))]">
-                      {column.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-[hsl(var(--muted-foreground))]">
-                      {column.description}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </main>
     </Shell>
   );

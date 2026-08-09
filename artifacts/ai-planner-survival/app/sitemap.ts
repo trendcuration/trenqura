@@ -5,15 +5,13 @@ import { fetchPublishedContentCached } from "../src/lib/cms";
 const SITE_URL = "https://www.trencub.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { posts, columns } = await fetchPublishedContentCached().catch(() => ({
+  const { posts } = await fetchPublishedContentCached().catch(() => ({
     posts: [],
-    columns: [],
   }));
 
   const staticPages = [
     "",
     "/categories",
-    "/columns",
     "/about",
     "/contact",
     "/privacy",
@@ -25,9 +23,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts.map((post) => ({
       url: `${SITE_URL}/posts/${encodeURIComponent(post.slug)}`,
       lastModified: post.updatedAtIso || post.publishedAtIso || undefined,
-    })),
-    ...columns.map((column) => ({
-      url: `${SITE_URL}/columns/${encodeURIComponent(column.slug)}`,
     })),
   ];
 }

@@ -13,10 +13,7 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function CategoriesPage() {
-  const { posts } = await fetchPublishedContentCached().catch(() => ({
-    posts: [],
-    columns: [],
-  }));
+  const { posts } = await fetchPublishedContentCached().catch(() => ({ posts: [] }));
 
   return (
     <Shell>
