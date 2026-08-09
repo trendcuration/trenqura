@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
   robots: { index: true, follow: true },
-  icons: { icon: "/favicon.svg" },
   alternates: { types: { "application/rss+xml": "/rss.xml" } },
   verification: {
     google: "gdw8EYciIb9gWvNIljjlRZ_8TF8_GefDgauY26KLDM0",
