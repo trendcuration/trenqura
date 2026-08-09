@@ -17,10 +17,7 @@ import {
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  const { posts } = await fetchPublishedContentCached().catch(() => ({
-    posts: [],
-    columns: [],
-  }));
+  const { posts } = await fetchPublishedContentCached().catch(() => ({ posts: [] }));
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -60,10 +57,7 @@ export default async function PostDetailPage({
   const post = await fetchPublishedPostBySlug(slug).catch(() => null);
   if (!post) notFound();
 
-  const { posts } = await fetchPublishedContentCached().catch(() => ({
-    posts: [],
-    columns: [],
-  }));
+  const { posts } = await fetchPublishedContentCached().catch(() => ({ posts: [] }));
   const related = posts.filter((item) => post.related.includes(item.slug));
 
   return (

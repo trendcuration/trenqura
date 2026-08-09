@@ -1,6 +1,6 @@
 import { cache } from "react";
 
-import type { Column, ContentKind, Post, Status } from "../data";
+import type { ContentKind, Post, Status } from "../data";
 import { supabase } from "./supabase";
 
 type JsonRecord = Record<string, unknown>;
@@ -27,16 +27,6 @@ type PostRow = {
   created_at: string;
   updated_at: string;
 };
-type ColumnRow = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  status: Status;
-  issue: string;
-  body: unknown;
-};
-
 const strings = (value: unknown): string[] =>
   Array.isArray(value)
     ? value.filter((item): item is string => typeof item === "string")
@@ -100,16 +90,6 @@ export const toPost = (row: PostRow): Post => ({
   featured: Boolean(row.featured),
 });
 
-export const toColumn = (row: ColumnRow): Column => ({
-  id: row.id,
-  slug: row.slug,
-  title: row.title,
-  description: row.description,
-  status: row.status,
-  issue: row.issue,
-  body: strings(row.body),
-});
-
 export type PostInput = Omit<Post, "id" | "publishedAt" | "revisedAt">;
 export const toPostRow = (
   post: PostInput,
@@ -144,24 +124,13 @@ async function requireClient() {
 
 export async function fetchPublishedContent() {
   const client = await requireClient();
-  const [postResult, columnResult] = await Promise.all([
-    client
-      .from("posts")
-      .select("*")
-      .eq("status", "published")
-      .order("published_at", { ascending: false }),
-    client
-      .from("columns")
-      .select("*")
-      .eq("status", "published")
-      .order("created_at", { ascending: false }),
-  ]);
-  if (postResult.error) throw postResult.error;
-  if (columnResult.error) throw columnResult.error;
-  return {
-    posts: (postResult.data as PostRow[]).map(toPost),
-    columns: (columnResult.data as ColumnRow[]).map(toColumn),
-  };
+  const result = await client
+    .from("posts")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+  if (result.error) throw result.error;
+  return { posts: (result.data as PostRow[]).map(toPost) };
 }
 
 export const fetchPublishedPostBySlug = cache(
@@ -175,20 +144,6 @@ export const fetchPublishedPostBySlug = cache(
       .maybeSingle();
     if (result.error) throw result.error;
     return result.data ? toPost(result.data as PostRow) : null;
-  },
-);
-
-export const fetchPublishedColumnBySlug = cache(
-  async (slug: string): Promise<Column | null> => {
-    if (!supabase) return null;
-    const result = await supabase
-      .from("columns")
-      .select("*")
-      .eq("status", "published")
-      .eq("slug", slug)
-      .maybeSingle();
-    if (result.error) throw result.error;
-    return result.data ? toColumn(result.data as ColumnRow) : null;
   },
 );
 
@@ -268,13 +223,11 @@ export async function uploadCoverImage(file: File) {
   if (!user) throw new Error("이미지 업로드를 위해 다시 로그인해 주세요.");
   const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
   const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
-  const upload = await client.storage
-    .from("post-images")
-    .upload(path, file, {
-      cacheControl: "31536000",
-      contentType: file.type,
-      upsert: false,
-    });
+  const upload = await client.storage.from("post-images").upload(path, file, {
+    cacheControl: "31536000",
+    contentType: file.type,
+    upsert: false,
+  });
   if (upload.error) throw upload.error;
   return client.storage.from("post-images").getPublicUrl(upload.data.path).data
     .publicUrl;

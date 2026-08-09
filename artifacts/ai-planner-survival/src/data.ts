@@ -33,16 +33,6 @@ export type Post = {
   related: string[];
   featured?: boolean;
 };
-export type Column = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  status: Status;
-  issue: string;
-  body: string[];
-};
-
 export const siteConfig = {
   name: "AI기획자로 살아남기",
   shortName: "AI기획자",
@@ -459,49 +449,9 @@ export const posts: Post[] = [
   },
 ];
 
-export const columns: Column[] = [
-  {
-    id: "c01",
-    slug: "퇴근-후-기획실",
-    title: "퇴근 후 기획실",
-    description: "직장인의 시간표 안에서 작은 실험을 굴리는 메모.",
-    status: "published",
-    issue: "Column 01",
-    body: [
-      "퇴근 뒤 두 시간은 새로운 사람이 되기에는 짧고, 어제의 나를 이어가기에는 충분하다.",
-      "이 칼럼에서는 거창한 사이드 프로젝트보다 다음 주에도 다시 열 수 있는 작은 결정들을 기록한다. 도구의 이름보다 멈춘 이유를 오래 들여다본다.",
-    ],
-  },
-  {
-    id: "c02",
-    slug: "검증-노트",
-    title: "검증 노트",
-    description: "만들었다는 말과 쓸 수 있다는 말 사이를 기록합니다.",
-    status: "published",
-    issue: "Column 02",
-    body: [
-      "정상적으로 작동하는 화면은 시작에 가깝다. 빈칸을 만났을 때, 기다림이 길어졌을 때, 내가 모르는 데이터가 들어왔을 때의 표정이 제품의 태도를 결정한다.",
-      "검증 노트는 그 표정을 놓치지 않기 위한 짧은 기록이다.",
-    ],
-  },
-  {
-    id: "c03",
-    slug: "보류함",
-    title: "보류함",
-    description: "만들지 않기로 한 것에서 배운 문제 정의의 기록.",
-    status: "draft",
-    issue: "Column 03",
-    body: [
-      "모든 아이디어를 실행하는 것은 운영이 아니다. 보류함에는 아직 설명할 수 없는 아이디어와, 지금 만들지 않는 편이 더 정직했던 판단을 넣는다.",
-    ],
-  },
-];
-
 export const publishedPosts = () =>
   posts.filter((post) => post.status === "published");
 export const getCategory = (slug: string) =>
   categories.find((category) => category.slug === slug);
 export const getPost = (slug: string, list: Post[] = posts) =>
   list.find((post) => post.slug === slug);
-export const getColumn = (slug: string, list: Column[] = columns) =>
-  list.find((column) => column.slug === slug);

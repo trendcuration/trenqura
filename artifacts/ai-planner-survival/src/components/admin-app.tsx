@@ -641,12 +641,6 @@ function AdminDesk() {
           ) : (
             <Notice text="왼쪽에서 글을 선택하거나 새 초안을 만드세요." />
           )}
-          <div className="mt-8 border border-dashed p-5 text-sm leading-7 text-[hsl(var(--muted-foreground))]">
-            <strong>칼럼 관리</strong>
-            <br />
-            칼럼의 실제 작성·편집 기능은 다음 단계에서 연결합니다. 현재 공개
-            칼럼은 Supabase에서 읽기만 합니다.
-          </div>
         </section>
       </main>
     </div>

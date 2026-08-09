@@ -17,10 +17,7 @@ const cdata = (value = "") =>
 export const revalidate = 300;
 
 export async function GET() {
-  const { posts } = await fetchPublishedContentCached().catch(() => ({
-    posts: [],
-    columns: [],
-  }));
+  const { posts } = await fetchPublishedContentCached().catch(() => ({ posts: [] }));
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
