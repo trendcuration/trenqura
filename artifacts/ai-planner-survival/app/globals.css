@@ -266,9 +266,15 @@
 .prose-editorial h2 {
   font-family: var(--app-font-serif);
   font-size: 1.65rem;
+  font-weight: 700;
   line-height: 1.35;
   color: hsl(var(--primary));
   margin: 3.75rem 0 1.75rem;
+  display: inline-block;
+  background-image: linear-gradient(
+    transparent 62%,
+    hsl(var(--accent) / 0.32) 62%
+  );
 }
 .prose-editorial h3 {
   font-family: var(--app-font-serif);
