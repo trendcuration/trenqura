@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { MobileNav } from "./mobile-nav";
+
 export function Tag({ children }: { children: ReactNode }) {
   return (
     <span className="font-mono text-[10px] tracking-[.08em] text-[hsl(var(--accent))]">
@@ -15,11 +17,11 @@ export function Header() {
       <div className="container-editorial flex min-h-[72px] items-center justify-between gap-3 py-2 text-sm md:gap-7">
         <Link
           href="/"
-          className="brand-mark text-base font-bold leading-tight text-[hsl(var(--primary))] md:text-[1.18rem]"
+          className="brand-mark whitespace-nowrap text-xl font-bold leading-tight text-[hsl(var(--primary))] md:text-2xl"
         >
           AI<span>기획자</span>로 살아남기
         </Link>
-        <nav className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 md:gap-3 text-xs md:text-sm">
+        <nav className="hidden items-center gap-3 text-xs md:flex md:text-sm">
           <Link href="/categories" className="nav-link">
             카테고리
           </Link>
@@ -34,11 +36,12 @@ export function Header() {
           </Link>
           <Link
             href="/contact"
-            className="button-primary inline-flex items-center justify-center rounded-sm px-3 py-2 text-xs font-semibold leading-none md:px-4 md:py-2 md:text-sm"
+            className="button-primary inline-flex items-center justify-center rounded-sm px-4 py-2 text-sm font-semibold leading-none"
           >
             연락하기
           </Link>
         </nav>
+        <MobileNav />
       </div>
     </header>
   );
