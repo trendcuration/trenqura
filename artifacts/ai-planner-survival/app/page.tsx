@@ -96,6 +96,16 @@ export default async function HomePage() {
               </div>
             </div>
           )}
+          {!error && posts.length > 0 && (
+            <div className="mt-8">
+              <Link
+                href="/posts"
+                className="nav-link inline-flex items-center gap-1 text-sm"
+              >
+                전체 기록 보기 <ArrowRight size={15} />
+              </Link>
+            </div>
+          )}
         </section>
       </main>
     </Shell>

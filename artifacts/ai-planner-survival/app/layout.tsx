@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { siteConfig } from "../src/data";
 import "./globals.css";
 
+const ADSENSE_CLIENT = "ca-pub-5233282360340103";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.trencub.com"),
   title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
@@ -30,6 +32,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
+      <head>
+        {/* Google AdSense loader — kept in <head> to match AdSense's own
+            verification instructions. */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
