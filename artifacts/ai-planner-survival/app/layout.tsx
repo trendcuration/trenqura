@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Script from "next/script";
 
 import { siteConfig } from "../src/data";
 import "./globals.css";
+
+const ADSENSE_CLIENT = "ca-pub-5233282360340103";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.trencub.com"),
@@ -30,7 +33,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Script
+          id="google-adsense"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+        />
+      </body>
     </html>
   );
 }

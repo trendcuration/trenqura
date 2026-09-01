@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const links = [
+  { href: "/posts", label: "전체 기록" },
   { href: "/categories", label: "카테고리" },
   { href: "/about", label: "소개" },
   { href: "/privacy", label: "개인정보처리방침" },

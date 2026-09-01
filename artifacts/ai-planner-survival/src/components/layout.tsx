@@ -22,6 +22,9 @@ export function Header() {
           AI<span>기획자</span>로 살아남기
         </Link>
         <nav className="hidden items-center gap-3 text-xs md:flex md:text-sm">
+          <Link href="/posts" className="nav-link">
+            전체 기록
+          </Link>
           <Link href="/categories" className="nav-link">
             카테고리
           </Link>
