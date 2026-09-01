@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Script from "next/script";
 
 import { siteConfig } from "../src/data";
 import "./globals.css";
@@ -33,15 +32,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
-      <body>
-        {children}
-        <Script
-          id="google-adsense"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
+      <head>
+        {/* Google AdSense loader — kept in <head> to match AdSense's own
+            verification instructions. */}
+        <script
+          async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
         />
-      </body>
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
